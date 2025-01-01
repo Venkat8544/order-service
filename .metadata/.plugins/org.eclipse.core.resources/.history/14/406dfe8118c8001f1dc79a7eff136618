@@ -1,0 +1,12 @@
+package com.ecom.orderservice.model;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "ecom_orders")
+public class EcomOrders {
+
+	@Id
+	private Long orderId;,
+	 
+}

@@ -1,0 +1,21 @@
+package com.ecom.orderservice.model;
+
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.Builder;
+
+@Document(collection = "ecom_orders")
+@Builder
+public class EcomOrders {
+
+	@Id
+	private Long id;
+	private LocalDateTime orderedDate;
+	private double totalAmount;
+	private String orderStatus; 
+	private String customerId;
+    private String shippingAddress;	 
+}

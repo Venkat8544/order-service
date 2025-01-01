@@ -1,0 +1,36 @@
+package com.ecom.orderservice.service.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.ecom.orderservice.dto.EcomOrdersDto;
+import com.ecom.orderservice.exception.OrderServiceException;
+import com.ecom.orderservice.model.EcomOrders;
+import com.ecom.orderservice.repository.EcomOrdersRepository;
+import com.ecom.orderservice.service.OrderService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class EcomOrderServiceImpl implements OrderService {
+
+	private final EcomOrdersRepository orderRepo;
+
+	@Override
+	public boolean createEcomOrder(EcomOrdersDto orderDto) {
+		try {
+			EcomOrders orderData = mapDtoToModel(orderDto);
+			orderRepo.save(orderData);
+		} catch (Exception e) {
+			throw new OrderServiceException("Failed to create Ecom order: " + e.getMessage());
+		}
+		return true;
+	}
+
+	private EcomOrders mapDtoToModel(EcomOrdersDto orderDto) {
+		return EcomOrders.builder().orderedDate(orderDto.getOrderedDate()).customerId(orderDto.getCustomerId())
+				.orderLines(orderDto.getOrderLines()).orderStatus(orderDto.getOrderStatus())
+				.totalAmount(orderDto.getTotalAmount()).shippingAddress(orderDto.getShippingAddress())
+				.orderId(orderDto.getOrderId()).build();
+	}
+}

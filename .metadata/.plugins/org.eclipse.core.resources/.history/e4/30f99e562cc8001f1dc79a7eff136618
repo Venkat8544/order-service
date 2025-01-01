@@ -1,0 +1,9 @@
+package com.ecom.orderservice.dto;
+
+import lombok.Data;
+
+@Data
+public class OrderCreationResponseDto {
+	String orderId;
+	String orderStatus;
+}

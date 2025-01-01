@@ -1,0 +1,8 @@
+spring:
+   application:
+      name: order-service
+   data:
+      mongodb:
+          uri: mongodb+srv://venkataramanashreenu:BAetaFfwk2IkT7gP@cluster0.sztgw.mongodb.net/<your-database-name>?retryWrites=true&w=majority
+
+

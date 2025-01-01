@@ -1,0 +1,13 @@
+package com.ecom.orderservice.model;
+
+import java.math.BigDecimal;
+
+import lombok.Builder;
+
+@Builder
+public class OrderLine {
+	private String productId;
+	private int quantity;
+	private BigDecimal unitPrice;
+	private String productName;
+}

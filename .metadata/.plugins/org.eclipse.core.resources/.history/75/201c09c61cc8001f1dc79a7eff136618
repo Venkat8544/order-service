@@ -1,0 +1,10 @@
+package com.ecom.orderservice.model;
+
+import lombok.Builder;
+
+@Builder
+public class OrderLine {
+	private String productId;
+	private int quantity;
+	private double price;
+}

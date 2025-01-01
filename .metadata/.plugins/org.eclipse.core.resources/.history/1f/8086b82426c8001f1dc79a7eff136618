@@ -1,0 +1,10 @@
+package com.ecom.orderservice.service;
+
+import org.springframework.stereotype.Service;
+
+import com.ecom.orderservice.dto.EcomOrdersDto;
+
+@Service
+public interface OrderService {
+	String createEcomOrder(EcomOrdersDto orderDto);
+}

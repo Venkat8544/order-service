@@ -1,0 +1,5 @@
+package com.ecom.orderservice.service.impl;
+
+public class EcomOrderServiceImpl {
+
+}

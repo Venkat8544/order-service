@@ -1,0 +1,10 @@
+spring:
+   application:
+      name: order-service
+   data:
+      mongodb:
+         uri: mongodb+srv://venkataramanashreenu:BAetaFfwk2IkT7gP@cluster0.sztgw.mongodb.net/ordersdb?retryWrites=true&w=majority
+
+
+server:
+  port: 9091

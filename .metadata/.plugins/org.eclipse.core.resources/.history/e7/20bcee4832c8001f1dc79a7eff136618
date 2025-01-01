@@ -1,0 +1,23 @@
+package com.ecom.orderservice.dto;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.ecom.orderservice.model.OrderLine;
+
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
+public class EcomOrdersDto {
+	private String id;
+	private String orderId;
+	private LocalDateTime orderedDate;
+	private BigDecimal totalAmount;
+	private String orderStatus; 
+	private String customerId;
+    private String shippingAddress;
+    private List<OrderLine> orderLines;
+}

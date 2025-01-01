@@ -1,0 +1,21 @@
+package com.ecom.orderservice.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecom.orderservice.model.EcomOrders;
+
+@RestController
+@RequestMapping("/ecom")
+public class EcomOrderController {
+
+	@PostMapping("/create/ecomorder")
+	public ResponseEntity<String> createEcomOrder(@RequestBody EcomOrders orderRequest) {
+		return new ResponseEntity<>("Order created successfully.", HttpStatus.CREATED);
+	}
+
+}

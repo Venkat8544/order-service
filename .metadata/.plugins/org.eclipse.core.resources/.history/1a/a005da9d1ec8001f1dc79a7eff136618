@@ -1,0 +1,22 @@
+package com.ecom.orderservice.dto;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.ecom.orderservice.model.EcomOrders;
+import com.ecom.orderservice.model.OrderLine;
+
+import lombok.Builder;
+import lombok.Getter;
+
+
+@Builder
+@Getter
+public class EcomOrdersDto {
+	private LocalDateTime orderedDate;
+	private double totalAmount;
+	private String orderStatus; 
+	private String customerId;
+    private String shippingAddress;
+    private List<OrderLine> orderLines;
+}

@@ -1,0 +1,6 @@
+package com.ecom.orderservice.dto;
+
+@Data
+public class OrderCreationResponseDto {
+
+}
