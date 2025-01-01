@@ -18,7 +18,6 @@ import lombok.Getter;
 @Getter
 public class EcomOrdersDto {
 	
-	@NotNull(message = "document ID cannot be null")
 	private String id;
 	
 	@NotNull(message = "Order ID cannot be null")

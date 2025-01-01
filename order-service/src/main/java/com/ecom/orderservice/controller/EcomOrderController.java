@@ -2,9 +2,10 @@ package com.ecom.orderservice.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,14 +29,17 @@ public class EcomOrderController {
 	private final EcomOrderServiceImpl orderServiceImpl;
 
 	@PostMapping("/order")
-	public ResponseEntity<OrderCreationResponseDto> createEcomOrder(@Valid @RequestBody EcomOrdersDto orderRequest) {
-		OrderCreationResponseDto status = orderServiceImpl.createEcomOrder(orderRequest);
+	public ResponseEntity<List<OrderCreationResponseDto>> createEcomOrder(
+			@Valid @RequestBody List<EcomOrdersDto> orderRequest) {
+		List<OrderCreationResponseDto> status = orderServiceImpl.createEcomOrder(orderRequest);
 		return new ResponseEntity<>(status, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/orders")
-	public ResponseEntity<List<EcomOrdersDto>> getAllOrders() {
-		List<EcomOrdersDto> orders = orderServiceImpl.getAllOrders();
+	public ResponseEntity<List<EcomOrdersDto>> getAllOrders(@RequestParam(name = "page") int page,
+			@RequestParam(name = "size") int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		List<EcomOrdersDto> orders = orderServiceImpl.getAllOrders(pageable);
 		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
 

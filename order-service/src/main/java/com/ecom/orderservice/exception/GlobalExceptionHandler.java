@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorDetails> handleGenericException(Exception ex, WebRequest request) {
-        log.error("Exception occurred: ", ex);
+		log.error("Exception occurred: ", ex);
 		ErrorDetails error = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -26,15 +26,19 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorDetails> handleOrderServiceException(OrderServiceException ex, WebRequest request) {
 		log.error("OrderServiceException occurred: ", ex);
 		ErrorDetails error = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
-	
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        StringBuilder errorMessage = new StringBuilder();
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            errorMessage.append(error.getDefaultMessage()).append(" ");
-        });
-        return new ResponseEntity<>(errorMessage.toString(), HttpStatus.BAD_REQUEST);
-    }
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ErrorDetails> handleValidationExceptions(MethodArgumentNotValidException ex,
+			WebRequest request) {
+		StringBuilder errorMessage = new StringBuilder();
+		ex.getBindingResult().getAllErrors().forEach(error -> {
+			errorMessage.append(error.getDefaultMessage()).append(" ");
+		});
+
+		ErrorDetails error = new ErrorDetails(LocalDateTime.now(), errorMessage.toString(),
+				request.getDescription(false));
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
 }

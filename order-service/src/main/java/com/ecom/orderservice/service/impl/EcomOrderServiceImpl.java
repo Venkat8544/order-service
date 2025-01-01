@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -29,27 +31,36 @@ public class EcomOrderServiceImpl implements OrderService {
 	private final MongoTemplate mongoTemplate;
 
 	@Override
-	public OrderCreationResponseDto createEcomOrder(EcomOrdersDto orderDto) {
+	public List<OrderCreationResponseDto> createEcomOrder(List<EcomOrdersDto> orderDto) {
 		try {
-			EcomOrders orderData = mapDtoToModel(orderDto);
-			orderRepo.save(orderData);
+			List<EcomOrders> orderData = mapDtoToModel(orderDto);
+			orderRepo.saveAll(orderData);
+			return prepareResponse(orderData);
 		} catch (Exception e) {
 			throw new OrderServiceException("Failed to create Ecom order: " + e.getMessage());
 		}
-		return OrderCreationResponseDto.builder().orderStatus("Created").orderId(orderDto.getOrderId()).build();
 	}
 
-	private EcomOrders mapDtoToModel(EcomOrdersDto orderDto) {
-		return EcomOrders.builder().orderedDate(orderDto.getOrderedDate()).customerId(orderDto.getCustomerId())
-				.orderLines(orderDto.getOrderLines()).orderStatus(orderDto.getOrderStatus())
-				.totalAmount(orderDto.getTotalAmount()).shippingAddress(orderDto.getShippingAddress())
-				.orderId(orderDto.getOrderId()).build();
+	private List<OrderCreationResponseDto> prepareResponse(List<EcomOrders> orders) {
+		return orders.stream()
+				.map(ord -> OrderCreationResponseDto.builder().orderStatus("Created").orderId(ord.getOrderId()).build())
+				.collect(Collectors.toList());
+
+	}
+
+	private List<EcomOrders> mapDtoToModel(List<EcomOrdersDto> orderDtos) {
+		return orderDtos.stream()
+				.map(order -> EcomOrders.builder().orderedDate(order.getOrderedDate()).customerId(order.getCustomerId())
+						.orderLines(order.getOrderLines()).orderStatus(order.getOrderStatus())
+						.totalAmount(order.getTotalAmount()).shippingAddress(order.getShippingAddress())
+						.orderId(order.getOrderId()).build())
+				.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<EcomOrdersDto> getAllOrders() {
-		List<EcomOrders> orderList = orderRepo.findAll();
-		return orderList.stream().map(this::mapOrdertoDto).collect(Collectors.toList());
+	public List<EcomOrdersDto> getAllOrders(Pageable pageable) {
+		Page<EcomOrders> ordersPage = orderRepo.findAll(pageable);
+		return ordersPage.stream().map(this::mapOrdertoDto).collect(Collectors.toList());
 	}
 
 	private EcomOrdersDto mapOrdertoDto(EcomOrders orderObj) {
@@ -71,7 +82,6 @@ public class EcomOrderServiceImpl implements OrderService {
 
 	@Override
 	public List<EcomOrdersDto> findByProductId(String product) {
-
 		Query query = new Query();
 		query.addCriteria(Criteria.where("orderLines.productId").is(product));
 		List<EcomOrders> orderList = mongoTemplate.find(query, EcomOrders.class);
@@ -81,5 +91,4 @@ public class EcomOrderServiceImpl implements OrderService {
 			return orderList.stream().map(this::mapOrdertoDto).collect(Collectors.toList());
 		}
 	}
-
 }
